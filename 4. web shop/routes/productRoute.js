@@ -32,3 +32,7 @@ router.get("/details", async (req, res) => {
     productDetails: productDetailsResult[0],
   });
 });
+
+router.post("/add-to-cart", (req, res) => {
+
+})
