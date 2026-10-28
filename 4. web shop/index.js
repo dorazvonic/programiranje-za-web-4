@@ -6,6 +6,7 @@ import { router as productRouter } from "./routes/productRoute.js";
 import { router as blogRouter} from "./routes/blogRoute.js";
 import { router as aboutRouter} from "./routes/aboutRoute.js";
 import cookieParser from "cookie-parser";
+import { v4 as uuidv4 } from 'uuid';
 
 // kada je dodana riječ export varijabla se može uvesti u druge .js datoteke
 export let dbConnection = null;
@@ -33,13 +34,20 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(express.urlencoded({ extended: true}))
 
 app.use(cookieParser())
 
 app.use((req, res, next) => {
   let sesionId = req.cookies.sesionId
+  if(!sesionId) {
+      sesionId = uuidv4();
+      res.cookie("sessionId", sesionId, {
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: "strict",
+      })
+  }
   console.log('middleware called')
   next()
 })
